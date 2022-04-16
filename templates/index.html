@@ -2,45 +2,94 @@
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="./static/styles/style.css">
+    <script>
+        var res = "";
+        function rec(){
+            var recognition = new webkitSpeechRecognition();
+		    recognition.lang = 'en-IN';
+            recognition.onresult = function(event){
+			document.getElementById("speechToText").value = event.results[0][0].transcript;
+			res = document.getElementById("speechToText").value;
+		    }
+		    recognition.start();
+       }
+       const sub = () => {
+            var isl_gif = ['any questions', 'are you angry', 'are you busy', 'are you hungry', 'are you sick', 'be careful',
+                   'can we meet tomorrow', 'did you book tickets', 'did you finish homework', 'do you go to office',
+                   'do you have money',
+                   'do you want something to drink', 'do you want tea or coffee', 'do you watch TV', 'dont worry',
+                   'flower is beautiful',
+                   'good afternoon', 'good evening', 'good morning', 'good night', 'good question', 'had your lunch',
+                   'happy journey',
+                   'hello what is your name', 'how many people are there in your family', 'i am a clerk',
+                   'i am bore doing nothing',
+                   'i am fine', 'i am sorry', 'i am thinking', 'i am tired', 'i dont understand anything',
+                   'i go to a theatre', 'i love to shop',
+                   'i had to say something but i forgot', 'i have headache', 'i like pink colour', 'i live in nagpur',
+                   'lets go for lunch', 'my mother is a homemaker',
+                   'my name is john', 'nice to meet you', 'no smoking please', 'open the door', 'please call me later',
+                   'please clean the room', 'please give me your pen', 'please use dustbin dont throw garbage',
+                   'please wait for sometime', 'shall I help you',
+                   'shall we go together tommorow', 'sign language interpreter', 'sit down', 'stand up', 'take care',
+                   'there was traffic jam', 'wait I am thinking',
+                   'what are you doing', 'what is the problem', 'what is todays date', 'what is your father do',
+                   'what is your job',
+                   'what is your mobile number', 'what is your name', 'whats up', 'when is your interview',
+                   'when we will go', 'where do you stay',
+                   'where is the bathroom', 'where is the police station', 'you are wrong', 'address', 'agra',
+                   'ahemdabad', 'all', 'april', 'assam', 'august', 'australia', 'badoda', 'banana', 'banaras',
+                   'banglore',
+                   'bihar', 'bihar', 'bridge', 'cat', 'chandigarh', 'chennai', 'christmas', 'church', 'clinic',
+                   'coconut', 'crocodile', 'dasara',
+                   'deaf', 'december', 'deer', 'delhi', 'dollar', 'duck', 'febuary', 'friday', 'fruits', 'glass',
+                   'grapes', 'gujrat', 'hello',
+                   'hindu', 'hyderabad', 'india', 'january', 'jesus', 'job', 'july', 'july', 'karnataka', 'kerala',
+                   'krishna', 'litre', 'mango',
+                   'may', 'mile', 'monday', 'mumbai', 'museum', 'muslim', 'nagpur', 'october', 'orange', 'pakistan',
+                   'pass', 'police station',
+                   'post office', 'pune', 'punjab', 'rajasthan', 'ram', 'restaurant', 'saturday', 'september', 'shop',
+                   'sleep', 'southafrica',
+                   'story', 'sunday', 'tamil nadu', 'temperature', 'temple', 'thursday', 'toilet', 'tomato', 'town',
+                   'tuesday', 'usa', 'village',
+                   'voice', 'wednesday', 'weight', 'please wait for sometime', 'what is your mobile number',
+                   'what are you doing', 'are you busy'];
+            var arr = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+               'v', 'w', 'x', 'y', 'z'];
+            if (isl_gif.includes(res) == true) {
+                document.getElementById("cont").style.backgroundImage = `url(static/ISL_Gifs/${res}.gif)`;
+                setTimeout(() => {
+                document.getElementById("cont").style.backgroundImage = "none";
+                document.getElementById("speechToText").value = "";
+                }, 5000);
+            }
+            else{
+                let i=0;
+                let interval
+                function change(){
+                    if(i < res.length){
+                        document.getElementById("cont").style.backgroundImage = `url(static/letters/${res[i++]}.jpg)`;
+                    }
+                    else{
+                        document.getElementById("cont").style.backgroundImage = "none";
+                        clearInterval(interval);
+                        document.getElementById("speechToText").value = "";
+                    }
+                }
+                interval = setInterval(change, 2000);
+
+            }
+       }
+</script>
     <title>Title</title>
 </head>
 <body>
-    <input id="start" type="submit" name="start" value="start"/>
-    <input type="submit" name="stop" value="stop"/>
-<script>
-    var file = "hello";
-    document
-    .querySelector("#start")
-    .addEventListener("click", e =>
-    fetch("http://127.0.0.1:5000/", {
-            method: "POST",
-            headers: {
-              "Accept": "application/json",
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              data: file
-            })
-          })
-          .then(res => {
-            if (!res.ok) {
-              throw Error(res.status);
-            }
+        <input type="text" name="sen" class="mytext" id="speechToText" placeholder="">
+        <button onclick="rec()"><i class="fa fa-microphone" style="font-size:14px"></i></button>
+        <input type="submit" onclick="sub()" value="submit"/>
+    <div id="cont"></div>
 
-            return res.json();
-          })
-          .then(({data: {val}}) => {
-            console.log(val);
-            const res = document.querySelector(".result");
-            res.innerText = `client got: ${val}`;
-          })
-          .catch(err => console.error(err))
-        ;
-      })
-    ;
-
-</script>
 </body>
 </html>
